@@ -1,0 +1,16 @@
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\Files\Knowledge\events.csv
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\ScriptsGen.exe
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\ScriptsGen.deps.json
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\ScriptsGen.runtimeconfig.json
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0-windows\ScriptsGen.pdb
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.AssemblyInfoInputs.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.AssemblyInfo.cs
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.csproj.CoreCompileInputs.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.sourcelink.json
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\refint\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.pdb
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ScriptsGen.genruntimeconfig.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0-windows\ref\ScriptsGen.dll

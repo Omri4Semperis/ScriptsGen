@@ -1,0 +1,27 @@
+﻿Log,Event ID,Event Description
+Security,4716,Trusted domain information was modified
+Security,4723,An account password was changed
+Security,4724,An account password was reset
+Security,4728,A member was added to a security-enabled global group
+Security,4729,A member was removed from a security-enabled global group
+Security,4732,A member was added to a security-enabled local group
+Security,4733,A member was removed from a security-enabled local group
+Security,4740,A user account was locked out
+Security,4742,A computer account object was changed
+Security,4746,A member was added to a security-disabled local group
+Security,4747,A member was removed from a security-disabled local group
+Security,4751,A member was added to a security-disabled global group
+Security,4752,A member was removed from a security-disabled global group
+Security,4756,A member was added to a security-enabled universal group
+Security,4757,A member was removed from a security-enabled universal group
+Security,4761,A member was added to a security-disabled universal group
+Security,4762,A member was removed from a security-disabled universal group
+Security,4765,A SID History was added to an account
+Security,5136,A directory service object was modified
+Security,5137,A directory service object was created
+Security,5138,A directory service object was restored
+Security,5139,A directory service object was moved
+Security,5141,A directory service object was delete
+System,1458,FSMO role change
+System,1898,Schema object changed
+System,1899,Schema object added
