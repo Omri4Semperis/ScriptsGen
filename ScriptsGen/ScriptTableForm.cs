@@ -43,7 +43,7 @@ public partial class ScriptTableForm : Form
         var instructionLabel = new Label();
         instructionLabel.Text = "• Events you requested are highlighted in yellow\n" +
                                "• Click on a script name to open it in the default text editor\n" +
-                               "• TRUE means the script triggers that event, FALSE means it doesn't";
+                               "• TRUE means the script triggers that event, empty cells mean it doesn't";
         instructionLabel.Font = new Font("Segoe UI", 9F);
         instructionLabel.Location = new Point(20, 80);
         instructionLabel.Size = new Size(1160, 60);
@@ -122,11 +122,11 @@ public partial class ScriptTableForm : Form
                 
                 if (script.EventTriggers.ContainsKey(eventId))
                 {
-                    row[j] = script.EventTriggers[eventId] ? "TRUE" : "FALSE";
+                    row[j] = script.EventTriggers[eventId] ? "TRUE" : "";
                 }
                 else
                 {
-                    row[j] = "FALSE";
+                    row[j] = "";
                 }
             }
 
