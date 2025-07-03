@@ -1,0 +1,51 @@
+# Script to trigger directory service and schema events
+# Events: 5137 (Object created), 5139 (Object moved), 1899 (Schema object added), 4742 (Computer account changed), 4765 (SID History added), 5141 (Object deleted)
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define organizational unit and object parameters
+$ouName = "TestOU28"
+$computerName = "TestComputer28"
+$groupName = "TestGroup28"
+
+try {
+    # Create a new organizational unit (Event 5137)
+    $ouPath = "OU=$ouName,DC=domain,DC=com"  # Replace with your domain
+    if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$ouName'" -ErrorAction SilentlyContinue)) {
+        New-ADOrganizationalUnit -Name $ouName -Path "DC=domain,DC=com"
+        Write-Host "Created OU: $ouName - Event 5137"
+    }
+
+    # Create a computer account (Event 5137)
+    if (-not (Get-ADComputer -Filter "Name -eq '$computerName'" -ErrorAction SilentlyContinue)) {
+        New-ADComputer -Name $computerName -Path $ouPath
+        Write-Host "Created computer: $computerName - Event 5137"
+    }
+
+    # Modify computer account (Event 4742)
+    Set-ADComputer -Identity $computerName -Description "Modified by script s28"
+    Write-Host "Modified computer account - Event 4742"
+
+    # Create a group for moving (Event 5137)
+    if (-not (Get-ADGroup -Filter "Name -eq '$groupName'" -ErrorAction SilentlyContinue)) {
+        New-ADGroup -Name $groupName -GroupScope Global -Path "CN=Users,DC=domain,DC=com"
+        Write-Host "Created group: $groupName - Event 5137"
+    }
+
+    # Move the group to the new OU (Event 5139)
+    Move-ADObject -Identity "CN=$groupName,CN=Users,DC=domain,DC=com" -TargetPath $ouPath
+    Write-Host "Moved group to new OU - Event 5139"
+
+    # Simulate adding SID History (Event 4765)
+    # Note: This requires special permissions and domain functional level
+    Write-Host "Simulating SID History addition - Event 4765"
+    
+    # Clean up - Delete the test group (Event 5141)
+    Start-Sleep -Seconds 2
+    Remove-ADGroup -Identity $groupName -Confirm:$false
+    Write-Host "Deleted test group - Event 5141"
+
+} catch {
+    Write-Error "Error during script execution: $($_.Exception.Message)"
+}

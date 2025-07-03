@@ -1,0 +1,58 @@
+# Script to trigger universal and disabled group management events
+# Events: 4756 (Add to universal group), 4757 (Remove from universal group), 4746 (Add to disabled local group), 4747 (Remove from disabled local group), 4724 (Password reset)
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define user and group parameters
+$userName = "testuser29"
+$userPassword = ConvertTo-SecureString "InitialPass789!" -AsPlainText -Force
+$universalGroupName = "TestUniversalGroup29"
+$disabledLocalGroupName = "TestDisabledLocalGroup29"
+
+try {
+    # Create a test user if not exists
+    if (-not (Get-ADUser -Filter "Name -eq '$userName'" -ErrorAction SilentlyContinue)) {
+        New-ADUser -Name $userName -AccountPassword $userPassword -Enabled $true
+        Write-Host "Created user: $userName"
+    }
+
+    # Create universal group if not exists
+    if (-not (Get-ADGroup -Filter "Name -eq '$universalGroupName'" -ErrorAction SilentlyContinue)) {
+        New-ADGroup -Name $universalGroupName -GroupScope Universal -GroupCategory Security
+        Write-Host "Created universal group: $universalGroupName"
+    }
+
+    # Create disabled local group if not exists
+    if (-not (Get-ADGroup -Filter "Name -eq '$disabledLocalGroupName'" -ErrorAction SilentlyContinue)) {
+        New-ADGroup -Name $disabledLocalGroupName -GroupScope DomainLocal -GroupCategory Distribution
+        Write-Host "Created disabled local group: $disabledLocalGroupName"
+    }
+
+    # Add user to security-enabled universal group (Event 4756)
+    Add-ADGroupMember -Identity $universalGroupName -Members $userName
+    Write-Host "Added $userName to universal group - Event 4756"
+
+    # Add user to security-disabled local group (Event 4746)
+    Add-ADGroupMember -Identity $disabledLocalGroupName -Members $userName
+    Write-Host "Added $userName to disabled local group - Event 4746"
+
+    # Reset user password (Event 4724)
+    $resetPassword = ConvertTo-SecureString "ResetPass999!" -AsPlainText -Force
+    Set-ADAccountPassword -Identity $userName -NewPassword $resetPassword -Reset
+    Write-Host "Reset password for $userName - Event 4724"
+
+    # Wait a moment then remove from groups
+    Start-Sleep -Seconds 2
+
+    # Remove user from universal group (Event 4757)
+    Remove-ADGroupMember -Identity $universalGroupName -Members $userName -Confirm:$false
+    Write-Host "Removed $userName from universal group - Event 4757"
+
+    # Remove user from disabled local group (Event 4747)
+    Remove-ADGroupMember -Identity $disabledLocalGroupName -Members $userName -Confirm:$false
+    Write-Host "Removed $userName from disabled local group - Event 4747"
+
+} catch {
+    Write-Error "Error during script execution: $($_.Exception.Message)"
+}
