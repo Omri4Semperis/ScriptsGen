@@ -1,0 +1,135 @@
+1. Create 1000 users
+
+
+<script>
+# Script to create 1000 users in Active Directory
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define parameters for user creation
+$numberOfUsers = 1000
+$password = "P@ssw0rd"  # You can customize the password here
+$ouPath = "OU=Users,DC=example,DC=com"  # Specify the OU where users will be created
+$userPrefix = "User"
+
+# Loop to create users
+for ($i = 1; $i -le $numberOfUsers; $i++) {
+    $username = $userPrefix + $i
+    $displayName = "User $i"
+    $userPrincipalName = $username + "@example.com"
+    $samAccountName = $username
+
+    # Create user
+    New-ADUser `
+        -Name $displayName `
+        -DisplayName $displayName `
+        -UserPrincipalName $userPrincipalName `
+        -SamAccountName $samAccountName `
+        -AccountPassword (ConvertTo-SecureString -AsPlainText $password -Force) `
+        -Enabled $true `
+        -Path $ouPath
+}
+</script>
+
+-----------------------------------------------------------------------
+
+2. Add defined users to a group
+
+
+<script>
+# Script to add users to a group in Active Directory
+
+# Define parameters
+$groupName = "YourGroupName"
+$ouPath = "OU=Users,DC=example,DC=com"  # Specify the OU where users were created
+
+# Get the group
+$group = Get-ADGroup -Filter { Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    # Get all users in the OU
+    $users = Get-ADUser -Filter * -SearchBase "LDAP://$ouPath"
+
+    # Add each user to the group
+    foreach ($user in $users) {
+        Add-ADGroupMember -Identity $group -Members $user
+    }
+
+    Write-Host "Users added to $groupName group successfully."
+} else {
+    Write-Host "Group $groupName not found."
+}
+</script>
+
+-----------------------------------------------------------------------
+
+3. Remove users from group
+
+
+<script>
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define parameters for removing users from the group
+$numberOfUsers = 1000
+$groupName = "group3"  # Specify the group name from which users will be removed
+$userPrefix = "User"
+
+# Loop to remove users from the group
+for ($i = 1; $i -le $numberOfUsers; $i++) {
+    $username = $userPrefix + $i
+
+    # Remove user from the specified group
+    try {
+        Remove-ADGroupMember -Identity $groupName -Members $username -Confirm:$false -ErrorAction Stop
+        Write-Host "Successfully removed $username from $groupName" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Error removing $username from $groupName:group3 $_" -ForegroundColor Red
+    }
+}
+
+Write-Host "User removal process completed."
+</script>
+
+-----------------------------------------------------------------------
+
+4. Delete users from an OU
+
+
+<script>
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define parameters for deleting users
+$numberOfUsers = 1000
+$userPrefix = "User"
+$ouPath = "OU=Enrichment testing,DC=d01,DC=lab"  # The OU where the users are located
+
+# Loop to delete users
+for ($i = 1; $i -le $numberOfUsers; $i++) {
+    $username = $userPrefix + $i
+    $userDN = "CN=$username,$ouPath"
+
+    # Check if the user exists
+    $user = Get-ADUser -Filter { SamAccountName -eq $username } -SearchBase $ouPath -ErrorAction SilentlyContinue
+
+    if ($user) {
+        try {
+            # User exists, proceed with deletion
+            Remove-ADUser -Identity $user -Confirm:$false -ErrorAction Stop
+            Write-Host "Successfully deleted $username" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Error deleting $username:User $_" -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "User $username not found in $ouPath" -ForegroundColor Yellow
+    }
+}
+
+Write-Host "User deletion process completed."
+</script>
