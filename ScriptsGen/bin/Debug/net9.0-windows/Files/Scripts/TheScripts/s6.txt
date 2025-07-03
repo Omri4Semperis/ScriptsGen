@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4732 - "A member was added to a security-enabled local group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-enabled local group
+$Username = "TestUser"
+$GroupName = "TestLocalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope DomainLocal -GroupCategory Security
+    Write-Host "Created security-enabled local group: $GroupName"
+}
+
+# Add member to the group (this triggers 4732)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4732 triggered: Added $Username to security-enabled local group $GroupName."

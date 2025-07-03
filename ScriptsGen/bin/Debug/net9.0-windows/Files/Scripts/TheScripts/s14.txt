@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4756 - "A member was added to a security-enabled universal group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-enabled universal group
+$Username = "TestUser"
+$GroupName = "TestUniversalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope Universal -GroupCategory Security
+    Write-Host "Created security-enabled universal group: $GroupName"
+}
+
+# Add member to the group (this triggers 4756)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4756 triggered: Added $Username to security-enabled universal group $GroupName."

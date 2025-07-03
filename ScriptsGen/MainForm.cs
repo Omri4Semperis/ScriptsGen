@@ -129,16 +129,87 @@ public partial class MainForm : Form
             return;
         }
 
-        var message = $"You have selected {selectedEvents.Count} event(s):\n\n";
-        foreach (var evt in selectedEvents)
+        try
         {
-            message += $"• {evt}\n";
-        }
-        message += "\nScript generation will continue with these events.";
+            // Load scripts and their event mappings
+            var matcher = new ScriptEventMatcher();
+            var scriptsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "Scripts");
+            var matchingCsvPath = Path.Combine(scriptsPath, "ScriptsEventsMatching.csv");
+            
+            // If not found in bin directory, try the source directory
+            if (!File.Exists(matchingCsvPath))
+            {
+                scriptsPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Scripts");
+                matchingCsvPath = Path.Combine(scriptsPath, "ScriptsEventsMatching.csv");
+            }
 
-        MessageBox.Show(message, "Selected Events", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        
-        // TODO: Continue to next step of the application
-        // For now, we'll just show the selection
+            if (!File.Exists(matchingCsvPath))
+            {
+                MessageBox.Show("Scripts mapping file not found. Please ensure ScriptsEventsMatching.csv exists.", 
+                    "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var allScripts = matcher.LoadScriptsAndMatching(scriptsPath, matchingCsvPath);
+            
+            // Check for perfect matches first (scripts that trigger ALL selected events)
+            var perfectMatches = matcher.CheckForPerfectMatches(allScripts, selectedEvents);
+            
+            if (perfectMatches.Any())
+            {
+                // Sort perfect matches by the number of additional events they trigger (ascending)
+                var sortedMatches = perfectMatches.OrderBy(script => 
+                    script.EventTriggers.Values.Count(triggered => triggered) - selectedEvents.Count
+                ).ToList();
+
+                var message = $"Great! Found {perfectMatches.Count} script(s) that can trigger all your selected events:\n\n";
+                foreach (var script in sortedMatches.Take(3)) // Show top 3
+                {
+                    var additionalEvents = script.EventTriggers.Where(kvp => kvp.Value && 
+                        !selectedEvents.Any(se => se.EventId == kvp.Key)).Count();
+                    message += $"• {script.Name}: {script.Description}\n";
+                    if (additionalEvents > 0)
+                    {
+                        message += $"  (Also triggers {additionalEvents} additional event(s))\n";
+                    }
+                    message += "\n";
+                }
+
+                if (sortedMatches.Count > 3)
+                {
+                    message += $"... and {sortedMatches.Count - 3} more.\n\n";
+                }
+
+                message += "Would you like to view all matching scripts in a table instead?";
+
+                var result = MessageBox.Show(message, "Perfect Matches Found!", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (result == DialogResult.No)
+                {
+                    // User is satisfied with the suggestions
+                    return;
+                }
+            }
+
+            // Filter scripts that trigger at least one of the selected events
+            var relevantScripts = matcher.FilterScriptsForEvents(allScripts, selectedEvents);
+            
+            if (!relevantScripts.Any())
+            {
+                MessageBox.Show("No scripts found that can trigger any of your selected events.", 
+                    "No Matching Scripts", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Show the table form
+            var tableForm = new ScriptTableForm(relevantScripts, selectedEvents, _events);
+            tableForm.Show();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error processing scripts: {ex.Message}", "Error", 
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

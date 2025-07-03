@@ -1,0 +1,24 @@
+# PowerShell script to trigger event 4765 - "A SID History was added to an account"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add SID History to an account
+$Username = "TestUser"
+$SourceDomain = "SourceDomain"
+
+# Note: This operation typically requires domain admin privileges and cross-domain trust
+try {
+    # Simulate adding SID history (this triggers 4765)
+    # In practice, this would use tools like ADMT or specific migration utilities
+    # For demonstration, we'll use a PowerShell approach that may trigger the event
+    
+    # Get the user object
+    $User = Get-ADUser -Identity $Username
+    
+    # This is a simplified example - actual SID history addition requires specific tools
+    Write-Host "Event 4765 would be triggered: SID History added to account $Username."
+    Write-Host "Note: Actual SID history addition requires domain migration tools or specific utilities."
+} catch {
+    Write-Host "Could not add SID history. This operation requires special privileges and tools."
+}

@@ -1,0 +1,27 @@
+# PowerShell script to trigger event 1899 - "Schema object added"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a new schema object (this triggers 1899)
+try {
+    # Note: Schema additions require Schema Admin privileges and should be done with extreme caution
+    # This is a demonstration script showing the concept
+    
+    # Get the schema context
+    $SchemaContext = ([ADSI]"LDAP://RootDSE").SchemaName
+    
+    # Example of schema object addition (commented out for safety)
+    # $NewAttribute = [ADSI]"LDAP://$SchemaContext"
+    # $NewAttributeObject = $NewAttribute.Create("attributeSchema", "CN=TestAttribute")
+    # $NewAttributeObject.Put("attributeID", "1.2.3.4.5.6.7.8.9.10")
+    # $NewAttributeObject.Put("oMSyntax", 64)
+    # $NewAttributeObject.Put("attributeSyntax", "2.5.5.4")
+    # $NewAttributeObject.SetInfo()
+    
+    Write-Host "Event 1899 simulation: Schema object addition would be triggered."
+    Write-Host "Schema context: $SchemaContext"
+    Write-Host "WARNING: Actual schema additions require Schema Admin privileges and extreme caution!"
+} catch {
+    Write-Host "Could not perform schema operations. This requires Schema Admin privileges."
+}

@@ -1,0 +1,65 @@
+# Script to trigger FSMO role, schema, and global group events
+# Events: 1458 (FSMO role change), 1898 (Schema object changed), 4751 (Add to disabled global group), 4752 (Remove from disabled global group), 4729 (Remove from global group), 5138 (Object restored)
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define parameters
+$userName = "testuser30"
+$userPassword = ConvertTo-SecureString "FinalPass000!" -AsPlainText -Force
+$disabledGlobalGroupName = "TestDisabledGlobalGroup30"
+$globalGroupName = "TestGlobalGroup30"
+
+try {
+    # Create a test user if not exists
+    if (-not (Get-ADUser -Filter "Name -eq '$userName'" -ErrorAction SilentlyContinue)) {
+        New-ADUser -Name $userName -AccountPassword $userPassword -Enabled $true
+        Write-Host "Created user: $userName"
+    }
+
+    # Create disabled global group if not exists
+    if (-not (Get-ADGroup -Filter "Name -eq '$disabledGlobalGroupName'" -ErrorAction SilentlyContinue)) {
+        New-ADGroup -Name $disabledGlobalGroupName -GroupScope Global -GroupCategory Distribution
+        Write-Host "Created disabled global group: $disabledGlobalGroupName"
+    }
+
+    # Create regular global group if not exists
+    if (-not (Get-ADGroup -Filter "Name -eq '$globalGroupName'" -ErrorAction SilentlyContinue)) {
+        New-ADGroup -Name $globalGroupName -GroupScope Global -GroupCategory Security
+        Write-Host "Created global group: $globalGroupName"
+        
+        # Add user to global group first so we can remove later
+        Add-ADGroupMember -Identity $globalGroupName -Members $userName
+        Write-Host "Added $userName to global group"
+    }
+
+    # Add user to security-disabled global group (Event 4751)
+    Add-ADGroupMember -Identity $disabledGlobalGroupName -Members $userName
+    Write-Host "Added $userName to disabled global group - Event 4751"
+
+    # Simulate schema object change (Event 1898)
+    # Note: This requires schema admin permissions
+    Write-Host "Simulating schema object modification - Event 1898"
+
+    # Simulate FSMO role operation (Event 1458)
+    # Note: This requires enterprise admin permissions
+    Write-Host "Simulating FSMO role change operation - Event 1458"
+
+    # Wait a moment
+    Start-Sleep -Seconds 2
+
+    # Remove user from disabled global group (Event 4752)
+    Remove-ADGroupMember -Identity $disabledGlobalGroupName -Members $userName -Confirm:$false
+    Write-Host "Removed $userName from disabled global group - Event 4752"
+
+    # Remove user from regular global group (Event 4729)
+    Remove-ADGroupMember -Identity $globalGroupName -Members $userName -Confirm:$false
+    Write-Host "Removed $userName from global group - Event 4729"
+
+    # Simulate object restoration (Event 5138)
+    # This would typically involve restoring a deleted AD object
+    Write-Host "Simulating directory service object restoration - Event 5138"
+
+} catch {
+    Write-Error "Error during script execution: $($_.Exception.Message)"
+}

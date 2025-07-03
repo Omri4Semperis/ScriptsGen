@@ -1,0 +1,11 @@
+# PowerShell script to trigger event 4724 - "An account password was reset"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Reset the password of a test account (this triggers 4724)
+$Username = "TestUser"
+$NewPassword = ConvertTo-SecureString -String "ResetPassword123!" -AsPlainText -Force
+Set-ADAccountPassword -Identity $Username -NewPassword $NewPassword -Reset
+
+Write-Host "Event 4724 triggered: Password reset for user $Username."

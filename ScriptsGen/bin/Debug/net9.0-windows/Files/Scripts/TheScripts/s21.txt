@@ -1,0 +1,23 @@
+# PowerShell script to trigger event 5138 - "A directory service object was restored"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Restore a directory service object from recycle bin
+$Username = "DeletedTestUser"
+
+# Restore a deleted object (this triggers 5138)
+try {
+    # First, try to find deleted objects
+    $DeletedObjects = Get-ADObject -Filter "Name -eq '$Username'" -IncludeDeletedObjects
+    
+    if ($DeletedObjects) {
+        # Restore the object
+        Restore-ADObject -Identity $DeletedObjects[0].ObjectGUID
+        Write-Host "Event 5138 triggered: Directory service object $Username was restored."
+    } else {
+        Write-Host "No deleted objects found to restore. Event 5138 simulation: Object would be restored."
+    }
+} catch {
+    Write-Host "Could not restore directory service object. AD Recycle Bin may not be enabled or insufficient permissions."
+}

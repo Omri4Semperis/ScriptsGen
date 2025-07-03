@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4746 - "A member was added to a security-disabled local group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-disabled local group
+$Username = "TestUser"
+$GroupName = "TestDisabledLocalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope DomainLocal -GroupCategory Distribution
+    Write-Host "Created security-disabled local group: $GroupName"
+}
+
+# Add member to the group (this triggers 4746)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4746 triggered: Added $Username to security-disabled local group $GroupName."

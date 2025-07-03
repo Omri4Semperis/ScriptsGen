@@ -1,0 +1,20 @@
+# PowerShell script to trigger event 4740 - "A user account was locked out"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Lock out a user account by setting failed logon attempts
+$Username = "TestUser"
+
+# First, ensure the account lockout policy allows lockouts
+# Then simulate failed logons to trigger lockout (this triggers 4740)
+# Note: This requires appropriate domain policy settings
+
+# Alternative approach: Directly set the account as locked
+try {
+    # Set account lockout time to trigger the event
+    Set-ADUser -Identity $Username -Replace @{lockoutTime = (Get-Date).ToFileTime()}
+    Write-Host "Event 4740 triggered: User account $Username was locked out."
+} catch {
+    Write-Host "Could not lock user account. User may not exist or insufficient permissions."
+}

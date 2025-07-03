@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4728 - "A member was added to a security-enabled global group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-enabled global group
+$Username = "TestUser"
+$GroupName = "TestGlobalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope Global -GroupCategory Security
+    Write-Host "Created security-enabled global group: $GroupName"
+}
+
+# Add member to the group (this triggers 4728)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4728 triggered: Added $Username to security-enabled global group $GroupName."

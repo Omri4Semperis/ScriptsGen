@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4761 - "A member was added to a security-disabled universal group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-disabled universal group
+$Username = "TestUser"
+$GroupName = "TestDisabledUniversalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope Universal -GroupCategory Distribution
+    Write-Host "Created security-disabled universal group: $GroupName"
+}
+
+# Add member to the group (this triggers 4761)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4761 triggered: Added $Username to security-disabled universal group $GroupName."

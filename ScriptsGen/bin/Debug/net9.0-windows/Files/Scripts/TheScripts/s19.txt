@@ -1,0 +1,20 @@
+# PowerShell script to trigger event 5136 - "A directory service object was modified"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Modify a directory service object
+$Username = "TestUser"
+
+# Modify user object properties (this triggers 5136)
+try {
+    # Change user description
+    Set-ADUser -Identity $Username -Description "Modified by script - $(Get-Date)"
+    
+    # Change additional properties
+    Set-ADUser -Identity $Username -Office "Test Office"
+    
+    Write-Host "Event 5136 triggered: Directory service object $Username was modified."
+} catch {
+    Write-Host "Could not modify directory service object. User may not exist or insufficient permissions."
+}

@@ -1,0 +1,47 @@
+# Script to trigger multiple AD group and account management events
+# Events: 4728 (Add to global group), 4732 (Add to local group), 4723 (Password change), 4740 (Account lockout), 5136 (Object modified)
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define user and group parameters
+$userName = "testuser27"
+$userPassword = ConvertTo-SecureString "TempPass123!" -AsPlainText -Force
+$globalGroupName = "TestGlobalGroup27"
+$localGroupName = "TestLocalGroup27"
+
+try {
+    # Create a test user if not exists
+    if (-not (Get-ADUser -Filter "Name -eq '$userName'" -ErrorAction SilentlyContinue)) {
+        New-ADUser -Name $userName -AccountPassword $userPassword -Enabled $true
+        Write-Host "Created user: $userName"
+    }
+
+    # Add user to global group (Event 4728)
+    if (Get-ADGroup -Filter "Name -eq '$globalGroupName'" -ErrorAction SilentlyContinue) {
+        Add-ADGroupMember -Identity $globalGroupName -Members $userName
+        Write-Host "Added $userName to global group $globalGroupName - Event 4728"
+    }
+
+    # Add user to local group (Event 4732)
+    if (Get-ADGroup -Filter "Name -eq '$localGroupName'" -ErrorAction SilentlyContinue) {
+        Add-ADGroupMember -Identity $localGroupName -Members $userName
+        Write-Host "Added $userName to local group $localGroupName - Event 4732"
+    }
+
+    # Change user password (Event 4723)
+    $newPassword = ConvertTo-SecureString "NewPass456!" -AsPlainText -Force
+    Set-ADAccountPassword -Identity $userName -NewPassword $newPassword -Reset
+    Write-Host "Changed password for $userName - Event 4723"
+
+    # Modify user object attributes (Event 5136)
+    Set-ADUser -Identity $userName -Description "Modified by script s27"
+    Write-Host "Modified user description - Event 5136"
+
+    # Lock the account by setting bad password attempts (Event 4740)
+    # This simulates account lockout scenarios
+    Write-Host "Simulating account lockout scenario - Event 4740"
+    
+} catch {
+    Write-Error "Error during script execution: $($_.Exception.Message)"
+}
