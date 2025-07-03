@@ -1,0 +1,14 @@
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0\ScriptsGen.exe
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0\ScriptsGen.deps.json
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0\ScriptsGen.runtimeconfig.json
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\bin\Debug\net9.0\ScriptsGen.pdb
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.AssemblyInfoInputs.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.AssemblyInfo.cs
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.csproj.CoreCompileInputs.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\refint\ScriptsGen.dll
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.pdb
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ScriptsGen.genruntimeconfig.cache
+C:\Users\OmriNardiNiri\OneDrive - Semperis\Documents\workshop June 2025\ScriptsGen\ScriptsGen\obj\Debug\net9.0\ref\ScriptsGen.dll
