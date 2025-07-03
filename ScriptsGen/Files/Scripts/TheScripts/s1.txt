@@ -1,0 +1,23 @@
+# Script to trigger event 4716 - "Trusted domain information was modified"
+
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Define parameters for modifying trusted domain information
+$domainName = "example.com"  # Replace with the trusted domain name
+$newTrustAttributes = 2  # Example: Modify trust attributes (value depends on your requirements)
+
+# Get the trusted domain object
+$trustedDomain = Get-ADTrust -Filter { Name -eq $domainName }
+
+if ($trustedDomain) {
+    try {
+        # Modify the trusted domain information
+        Set-ADTrust -Identity $domainName -TrustAttributes $newTrustAttributes
+        Write-Host "Successfully modified trusted domain information for $domainName" -ForegroundColor Green
+    } catch {
+        Write-Host "Error modifying trusted domain information for $domainName: $_" -ForegroundColor Red
+    }
+} else {
+    Write-Host "Trusted domain $domainName not found." -ForegroundColor Yellow
+}

@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 4751 - "A member was added to a security-disabled global group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Add a member to a security-disabled global group
+$Username = "TestUser"
+$GroupName = "TestDisabledGlobalGroup"
+
+# Create the group if it doesn't exist
+try {
+    Get-ADGroup -Identity $GroupName -ErrorAction Stop
+} catch {
+    New-ADGroup -Name $GroupName -GroupScope Global -GroupCategory Distribution
+    Write-Host "Created security-disabled global group: $GroupName"
+}
+
+# Add member to the group (this triggers 4751)
+Add-ADGroupMember -Identity $GroupName -Members $Username
+
+Write-Host "Event 4751 triggered: Added $Username to security-disabled global group $GroupName."

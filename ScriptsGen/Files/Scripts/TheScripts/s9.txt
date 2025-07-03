@@ -1,0 +1,16 @@
+# PowerShell script to trigger event 4742 - "A computer account object was changed"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Modify a computer account object
+$ComputerName = "TestComputer"
+
+# Modify computer account properties (this triggers 4742)
+try {
+    # Change the description of the computer account
+    Set-ADComputer -Identity $ComputerName -Description "Modified by script - $(Get-Date)"
+    Write-Host "Event 4742 triggered: Computer account object $ComputerName was changed."
+} catch {
+    Write-Host "Could not modify computer account. Computer may not exist or insufficient permissions."
+}

@@ -1,0 +1,17 @@
+# PowerShell script to trigger event 5137 - "A directory service object was created"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Create a new directory service object
+$NewUsername = "NewTestUser"
+$SecurePassword = ConvertTo-SecureString -String "TempPassword123!" -AsPlainText -Force
+
+# Create a new user object (this triggers 5137)
+try {
+    New-ADUser -Name $NewUsername -GivenName "New" -Surname "TestUser" -UserPrincipalName "$NewUsername@domain.com" -AccountPassword $SecurePassword -Enabled $true
+    
+    Write-Host "Event 5137 triggered: Directory service object $NewUsername was created."
+} catch {
+    Write-Host "Could not create directory service object. May already exist or insufficient permissions."
+}

@@ -1,0 +1,24 @@
+# PowerShell script to trigger event 1898 - "Schema object changed"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Modify a schema object (this triggers 1898)
+try {
+    # Note: Schema modifications require Schema Admin privileges and should be done with extreme caution
+    # This is a demonstration script showing the concept
+    
+    # Get the schema context
+    $SchemaContext = ([ADSI]"LDAP://RootDSE").SchemaName
+    
+    # Example of schema modification (commented out for safety)
+    # $SchemaObject = [ADSI]"LDAP://CN=User,$SchemaContext"
+    # $SchemaObject.Put("description", "Modified by script - $(Get-Date)")
+    # $SchemaObject.SetInfo()
+    
+    Write-Host "Event 1898 simulation: Schema object change would be triggered."
+    Write-Host "Schema context: $SchemaContext"
+    Write-Host "WARNING: Actual schema modifications require Schema Admin privileges and extreme caution!"
+} catch {
+    Write-Host "Could not perform schema operations. This requires Schema Admin privileges."
+}

@@ -1,0 +1,17 @@
+# PowerShell script to trigger event 4762 - "A member was removed from a security-disabled universal group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Remove a member from a security-disabled universal group
+$Username = "TestUser"
+$GroupName = "TestDisabledUniversalGroup"
+
+# Ensure the user is in the group first, then remove (this triggers 4762)
+try {
+    Add-ADGroupMember -Identity $GroupName -Members $Username -ErrorAction SilentlyContinue
+    Remove-ADGroupMember -Identity $GroupName -Members $Username -Confirm:$false
+    Write-Host "Event 4762 triggered: Removed $Username from security-disabled universal group $GroupName."
+} catch {
+    Write-Host "Could not remove member from group. Group or user may not exist."
+}

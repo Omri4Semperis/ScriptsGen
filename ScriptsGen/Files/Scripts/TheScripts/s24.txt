@@ -1,0 +1,22 @@
+# PowerShell script to trigger event 1458 - "FSMO role change"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Transfer FSMO roles (this triggers 1458)
+try {
+    # Get current domain controller
+    $CurrentDC = (Get-ADDomain).PDCEmulator
+    
+    # Note: This is a demonstration script. Actual FSMO role transfer requires careful planning
+    # and should only be done by experienced administrators
+    
+    # Example of FSMO role transfer (commented out for safety)
+    # Move-ADDirectoryServerOperationMasterRole -Identity "NewDC" -OperationMasterRole PDCEmulator
+    
+    Write-Host "Event 1458 simulation: FSMO role change would be triggered."
+    Write-Host "Current PDC Emulator: $CurrentDC"
+    Write-Host "WARNING: Actual FSMO role transfer should be done with extreme caution!"
+} catch {
+    Write-Host "Could not perform FSMO role operations. This requires domain admin privileges and careful planning."
+}

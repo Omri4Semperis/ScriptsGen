@@ -1,0 +1,26 @@
+# PowerShell script to trigger event 5139 - "A directory service object was moved"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Move a directory service object to a different OU
+$Username = "TestUser"
+$TargetOU = "OU=TestOU,DC=domain,DC=com"
+
+# Move object to different OU (this triggers 5139)
+try {
+    # Create target OU if it doesn't exist
+    try {
+        Get-ADOrganizationalUnit -Identity $TargetOU -ErrorAction Stop
+    } catch {
+        New-ADOrganizationalUnit -Name "TestOU" -Path "DC=domain,DC=com"
+        Write-Host "Created target OU: TestOU"
+    }
+    
+    # Move the user object
+    Move-ADObject -Identity (Get-ADUser -Identity $Username).DistinguishedName -TargetPath $TargetOU
+    
+    Write-Host "Event 5139 triggered: Directory service object $Username was moved."
+} catch {
+    Write-Host "Could not move directory service object. Object or target OU may not exist or insufficient permissions."
+}

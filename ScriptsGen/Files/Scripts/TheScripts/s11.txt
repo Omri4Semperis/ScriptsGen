@@ -1,0 +1,17 @@
+# PowerShell script to trigger event 4747 - "A member was removed from a security-disabled local group"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Remove a member from a security-disabled local group
+$Username = "TestUser"
+$GroupName = "TestDisabledLocalGroup"
+
+# Ensure the user is in the group first, then remove (this triggers 4747)
+try {
+    Add-ADGroupMember -Identity $GroupName -Members $Username -ErrorAction SilentlyContinue
+    Remove-ADGroupMember -Identity $GroupName -Members $Username -Confirm:$false
+    Write-Host "Event 4747 triggered: Removed $Username from security-disabled local group $GroupName."
+} catch {
+    Write-Host "Could not remove member from group. Group or user may not exist."
+}

@@ -1,0 +1,11 @@
+# PowerShell script to trigger event 4723 - "An account password was changed"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Change the password of a test account
+$Username = "TestUser"
+$NewPassword = ConvertTo-SecureString -String "NewPassword123!" -AsPlainText -Force
+Set-ADAccountPassword -Identity $Username -NewPassword $NewPassword -Reset
+
+Write-Host "Event 4723 triggered: Password changed for user $Username."

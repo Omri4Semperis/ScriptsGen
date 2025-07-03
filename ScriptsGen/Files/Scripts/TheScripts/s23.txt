@@ -1,0 +1,21 @@
+# PowerShell script to trigger event 5141 - "A directory service object was deleted"
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Delete a directory service object
+$Username = "TempTestUser"
+$SecurePassword = ConvertTo-SecureString -String "TempPassword123!" -AsPlainText -Force
+
+# Create and then delete an object (this triggers 5141)
+try {
+    # First create a temporary user
+    New-ADUser -Name $Username -GivenName "Temp" -Surname "TestUser" -UserPrincipalName "$Username@domain.com" -AccountPassword $SecurePassword -Enabled $true
+    
+    # Then delete the user (this triggers 5141)
+    Remove-ADUser -Identity $Username -Confirm:$false
+    
+    Write-Host "Event 5141 triggered: Directory service object $Username was deleted."
+} catch {
+    Write-Host "Could not delete directory service object. Object may not exist or insufficient permissions."
+}
